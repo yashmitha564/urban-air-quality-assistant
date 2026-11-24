@@ -1,0 +1,73 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f8f5;
+  color: #20352c;
+  line-height: 1.6;
+}
+
+header {
+  background: #145c45;
+  color: white;
+  text-align: center;
+  padding: 25px;
+}
+
+.hero {
+  text-align: center;
+  padding: 55px 20px;
+  background: #d8f3e5;
+}
+
+h1 {
+  font-size: 30px;
+  margin-bottom: 15px;
+}
+
+button {
+  background: #16845b;
+  color: white;
+  border: none;
+  padding: 13px 22px;
+  border-radius: 8px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+section {
+  padding: 30px 20px;
+}
+
+.aqi-card, .card {
+  background: white;
+  padding: 22px;
+  margin: 15px 0;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px #00000012;
+}
+
+#aqi {
+  font-size: 40px;
+  font-weight: bold;
+  color: #16845b;
+}
+
+input {
+  padding: 13px;
+  width: 100%;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+footer {
+  background: #145c45;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
