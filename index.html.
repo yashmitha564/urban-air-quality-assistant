@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Urban Air Quality Assistant</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h2>🌿 AirCare</h2>
+    <p>Cleaner Air, Healthier Life</p>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Urban Air Quality Assistant</h1>
+      <p>Understand your air. Protect your health. Build a greener future.</p>
+      <button onclick="getAirQuality()">Check Air Quality</button>
+    </section>
+
+    <section class="dashboard">
+      <h2>Air Quality Dashboard</h2>
+      <div class="aqi-card">
+        <h3>Current AQI</h3>
+        <p id="aqi">--</p>
+        <p id="status">Check your air quality</p>
+      </div>
+    </section>
+
+    <section class="suggestions">
+      <h2>🌱 Smart Daily Suggestions</h2>
+      <div class="card">
+        <h3>Low-emission Travel</h3>
+        <p>Choose walking, cycling or public transport when practical.</p>
+      </div>
+      <div class="card">
+        <h3>Indoor Air Quality</h3>
+        <p>Keep indoor spaces clean and ventilate when outdoor air is suitable.</p>
+      </div>
+      <div class="card">
+        <h3>Eco-friendly Lifestyle</h3>
+        <p>Reduce waste and choose reusable products.</p>
+      </div>
+    </section>
+
+    <section class="assistant">
+      <h2>🤖 Ask AirCare</h2>
+      <input id="question" type="text" placeholder="Ask about air pollution...">
+      <button onclick="askAssistant()">Ask</button>
+      <p id="answer">Your air quality assistant is ready!</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>AirCare | Urban Air Quality Assistant © 2026</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
