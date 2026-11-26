@@ -1,55 +1,116 @@
+"use strict";
 
-function getAirQuality() {
-  // Sample AQI for the first demonstration
-  const aqi = Math.floor(Math.random() * 100) + 1;
+// Get page elements
+const statusElement = document.getElementById("status");
+const aqiElement = document.getElementById("aqi");
+const questionElement = document.getElementById("question");
+const answerElement = document.getElementById("answer");
 
-  document.getElementById("aqi").textContent = aqi;
-
-  let status = "";
-
-  if (aqi <= 50) {
-    status = "Good 🌱";
-  } else if (aqi <= 100) {
-    status = "Moderate 🌤️";
-  } else if (aqi <= 150) {
-    status = "Unhealthy for sensitive groups ⚠️";
-  } else if (aqi <= 200) {
-    status = "Unhealthy";
-  } else if (aqi <= 300) {
-    status = "Very Unhealthy";
-  } else {
-    status = "Hazardous";
-  }
-
-  document.getElementById("status").textContent = status;
+// AQI classification
+function getAQIMessage(aqi) {
+  if (aqi <= 50) return "Good 🌱";
+  if (aqi <= 100) return "Moderate 🌤️";
+  if (aqi <= 150) return "Unhealthy for sensitive groups ⚠️";
+  if (aqi <= 200) return "Unhealthy";
+  if (aqi <= 300) return "Very Unhealthy";
+  return "Hazardous";
 }
 
-function askAssistant() {
-  const question = document
-    .getElementById("question")
-    .value.toLowerCase();
+// Fetch air quality
+async function getAirQuality() {
+  if (!statusElement || !aqiElement) return;
 
-  const answer = document.getElementById("answer");
-
-  if (!question.trim()) {
-    answer.textContent = "Please enter a question.";
+  if (!navigator.geolocation) {
+    statusElement.textContent = "Location is not supported.";
     return;
   }
 
-  if (question.includes("pollution") || question.includes("air")) {
-    answer.textContent =
-      "Air pollution can affect health. Check local AQI and reduce exposure when pollution is high.";
-  } else if (question.includes("plant")) {
-    answer.textContent =
-      "Plants can support greener spaces, but they do not replace proper air filtration.";
-  } else if (question.includes("travel") || question.includes("vehicle")) {
-    answer.textContent =
-      "Walking, cycling and public transport can help reduce transport emissions.";
+  statusElement.textContent = "Finding your location...";
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      try {
+        const { latitude, longitude } = position.coords;
+
+        const url =
+          `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&current=us_aqi`;
+
+        const controller = new AbortController();
+        const timeout = setTimeout(
+          () => controller.abort(), 10000
+        );
+
+        let response;
+
+        try {
+          response = await fetch(url, {
+            signal: controller.signal
+          });
+        } finally {
+          clearTimeout(timeout);
+        }
+
+        if (!response.ok) {
+          throw new Error("API request failed");
+        }
+
+        const data = await response.json();
+        const aqi = data?.current?.us_aqi;
+
+        if (
+          typeof aqi !== "number" ||
+          !Number.isFinite(aqi) ||
+          aqi < 0
+        ) {
+          throw new Error("Invalid AQI data");
+        }
+
+        aqiElement.textContent = aqi;
+        statusElement.textContent =
+          getAQIMessage(aqi) + " (US AQI)";
+
+      } catch (error) {
+        statusElement.textContent =
+          error.name === "AbortError"
+            ? "Request timed out. Try again."
+            : "Unable to load air quality data.";
+      }
+    },
+    (error) => {
+      statusElement.textContent =
+        error.code === 1
+          ? "Location permission denied."
+          : "Unable to get your location.";
+    },
+    { timeout: 10000, maximumAge: 300000 }
+  );
+}
+
+// Air quality assistant
+function askAssistant() {
+  if (!questionElement || !answerElement) return;
+
+  const question =
+    questionElement.value.trim().toLowerCase();
+
+  if (!question) {
+    answerElement.textContent =
+      "Please enter a question.";
+    return;
+  }
+
+  if (question.includes("travel")) {
+    answerElement.textContent =
+      "Consider public transport, walking or cycling when practical to reduce emissions.";
   } else if (question.includes("indoor")) {
-    answer.textContent =
-      "Keep indoor spaces clean and ventilate when outdoor air quality is suitable.";
+    answerElement.textContent =
+      "Keep indoor spaces clean and ventilate when outdoor air quality is better.";
+  } else if (question.includes("health")) {
+    answerElement.textContent =
+      "Check local air quality advisories and take appropriate precautions during poor air quality.";
   } else {
-    answer.textContent =
-      "Try asking about air pollution, indoor air quality, plants or low-emission travel.";
+    answerElement.textContent =
+      "Check your local AQI, reduce unnecessary emissions and follow official air quality advice.";
   }
 }
+
