@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Urban Air Quality Assistant</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🌿 AirCare</h1>
+    <p>Urban Air Quality Assistant</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Check Air Quality</h2>
+      <button onclick="getAirQuality()">Check Air Quality</button>
+      <h3 id="aqi">AQI: Not checked</h3>
+      <p id="status">Check your local air quality.</p>
+    </section>
+
+    <section>
+      <h2>🌱 Healthy Air Tips</h2>
+      <p>• Avoid unnecessary vehicle use.</p>
+      <p>• Use public transport when possible.</p>
+      <p>• Keep indoor spaces ventilated when outdoor air is clean.</p>
+    </section>
+
+    <section>
+      <h2>🤖 Ask AirCare</h2>
+      <input id="question" type="text" placeholder="Ask about air pollution...">
+      <button onclick="askAssistant()">Ask</button>
+      <p id="answer">Your air quality assistant is ready!</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
