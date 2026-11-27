@@ -57,8 +57,7 @@ button:hover {
 }
 
 input {
-  width: 100%;
-  padding: 12px;
+  width: 10
   border: 1px solid #aaa;
   border-radius: 8px;
   margin: 10px 0;
