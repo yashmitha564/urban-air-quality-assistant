@@ -1,0 +1,55 @@
+
+async function getAirQuality() {
+  const aqi = document.getElementById("aqi");
+  const status = document.getElementById("status");
+
+  if (!navigator.geolocation) {
+    status.textContent = "Location is not supported.";
+    return;
+  }
+
+  status.textContent = "Getting your location...";
+
+  navigator.geolocation.getCurrentPosition(async (position) => {
+    try {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi`;
+
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("API error");
+
+      const data = await response.json();
+      const value = data.current.us_aqi;
+
+      aqi.textContent = "AQI: " + value;
+
+      if (value <= 50) status.textContent = "Good 🌱";
+      else if (value <= 100) status.textContent = "Moderate 🌤️";
+      else if (value <= 150) status.textContent = "Unhealthy for sensitive groups ⚠️";
+      else if (value <= 200) status.textContent = "Unhealthy";
+      else if (value <= 300) status.textContent = "Very Unhealthy";
+      else status.textContent = "Hazardous";
+    } catch (error) {
+      status.textContent = "Unable to load air quality data.";
+    }
+  }, () => {
+    status.textContent = "Please allow location access.";
+  });
+}
+
+function askAssistant() {
+  const question = document.getElementById("question").value.toLowerCase();
+  const answer = document.getElementById("answer");
+
+  if (!question.trim()) {
+    answer.textContent = "Please enter a question.";
+  } else if (question.includes("travel")) {
+    answer.textContent = "Consider walking, cycling or public transport to reduce emissions.";
+  } else if (question.includes("indoor")) {
+    answer.textContent = "Keep indoor spaces clean and ventilate when outdoor air is clean.";
+  } else {
+    answer.textContent = "Check your local AQI and follow local air-quality advice.";
+  }
+}
